@@ -97,6 +97,20 @@ beobachtete absolute Fehlerdifferenz zwischen Fortran und Python
 Systeme sind extrem schlecht konditioniert und werden deshalb nicht als
 sprachübergreifende Genauigkeitsreferenz interpretiert.
 
+## Fortran-Threadskalierung
+
+Auf `turing` erreicht der vollständige dichte Fortran-Arbeitsablauf bei
+`n=8192` mit OpenBLAS 0.3.34 sein Minimum bei 16 Threads: Die Gesamtzeit
+sinkt von `22.512 s` auf `3.992 s`, entsprechend einem Speedup von `5.64`.
+Damit liegt Fortran in dieser Messung praktisch auf dem Niveau von
+MATLAB/MKL und Python/NumPy.
+
+Eine frühere Messung mit dem AlmaLinux-Systempaket OpenBLAS 0.3.29 skalierte
+in `DGESV` nicht. Ursache war ein inzwischen korrigierter Schwellwertfehler
+dieser OpenBLAS-Version und keine Grenze von Fortran 95. Messwerte,
+Kontrollversuche und Reproduktionshinweise stehen in
+[OPENBLAS-THREADING.md](OPENBLAS-THREADING.md).
+
 ## Lizenz
 
 Der Quellcode steht unter der [MIT-Lizenz](LICENSE).

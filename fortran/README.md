@@ -83,13 +83,21 @@ separaten Bibliothek `gwr_benchmark_support`; die numerische Bibliothek
 `gwr_parameteridentifikation` bleibt mit strengem Fortran 95 uebersetzt.
 
 Fuer reproduzierbare Messungen kann ein bestimmtes kombiniertes
-BLAS-/LAPACK-Backend beim Konfigurieren explizit gewaehlt werden, zum Beispiel
-die pthread-Variante von OpenBLAS auf `turing`:
+BLAS-/LAPACK-Backend beim Konfigurieren explizit gewaehlt werden. Auf
+`turing` wurde OpenBLAS 0.3.34 benutzerlokal installiert und so eingebunden:
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
-    -DGWR_BLAS_LAPACK_LIBRARY=/usr/lib64/libopenblasp.so
+cmake -S . -B build-openblas -DCMAKE_BUILD_TYPE=Release \
+    -DGWR_BLAS_LAPACK_LIBRARY=/path/to/openblas-0.3.34/lib/libopenblas.so
+cmake --build build-openblas --parallel
 ```
+
+Das auf dem Testsystem vorhandene OpenBLAS 0.3.29 besitzt im `DGESV`-Treiber
+einen inzwischen korrigierten Schwellwertfehler, durch den der hier verwendete
+Fall mit einer rechten Seite seriell ausgefuehrt wird. Fuer Threadvergleiche
+sollte deshalb OpenBLAS 0.3.32 oder neuer verwendet werden. Die genaue
+Diagnose und die Messreihe mit OpenBLAS 0.3.34 sind in
+[`../OPENBLAS-THREADING.md`](../OPENBLAS-THREADING.md) dokumentiert.
 
 ## Lineare Algebra
 
