@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gwr-parameteridentifikation"
+version = "0.1.0"
+description = "MATLAB/Python reference for the GWR parameter-identification example"
+requires-python = ">=3.13,<3.14"
+dependencies = ["numpy==2.5.2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

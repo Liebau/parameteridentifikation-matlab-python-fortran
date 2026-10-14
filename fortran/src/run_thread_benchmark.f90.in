@@ -1,0 +1,46 @@
+program run_thread_benchmark
+    ! Configured by CMake for one fixed thread count.  BLAS thread control and
+    ! CPU affinity remain external, as in the MATLAB/Python measurements.
+    use gwr_precision, only: dp
+    use gwr_performance, only: benchmark_result, measure_performance
+    implicit none
+
+    integer, parameter :: n = 8192
+    integer, parameter :: repeats = 3
+    integer, parameter :: thread_count = @GWR_THREAD_COUNT@
+    real(dp), parameter :: beta = 1.0e-6_dp
+    character(len=*), parameter :: thread_mode = &
+        'physical-@GWR_THREAD_COUNT@-cpus-@GWR_CPU_MASK@'
+    character(len=*), parameter :: output_path = 'benchmark_fortran.csv'
+    type(benchmark_result) :: result
+    integer :: info, output_unit, io_status
+    character(len=256) :: message
+
+    call measure_performance(n, beta, repeats, result, info, message)
+    if (info /= 0) then
+        write(*, '(A,I0,A,A)') 'Benchmark failed (info=', info, &
+            '): ', trim(message)
+        stop 1
+    end if
+
+    output_unit = 30
+    open(unit=output_unit, file=output_path, status='replace', &
+         action='write', iostat=io_status)
+    if (io_status /= 0) stop 1
+    write(output_unit, '(A)') 'implementation,thread_mode,'// &
+        'thread_count,n,beta,assembly_seconds,direct_solve_seconds,'// &
+        'tikhonov_setup_seconds,tikhonov_solve_seconds'
+    write(output_unit, '(A,A,A,I0,A,I0,5(A,ES24.16E3))') &
+        'Fortran/gfortran,', thread_mode, ',', thread_count, ',', result%n, &
+        ',', result%beta, ',', result%assembly_seconds, ',', &
+        result%direct_solve_seconds, ',', result%tikhonov_setup_seconds, &
+        ',', result%tikhonov_solve_seconds
+    close(output_unit)
+
+    write(*, '(A,I0,A,I0)') 'Fortran thread benchmark: n=', n, &
+        ', threads=', thread_count
+    write(*, '(A,4ES16.6)') 'Phases:', result%assembly_seconds, &
+        result%direct_solve_seconds, result%tikhonov_setup_seconds, &
+        result%tikhonov_solve_seconds
+
+end program run_thread_benchmark
