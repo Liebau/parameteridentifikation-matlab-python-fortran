@@ -1,5 +1,7 @@
 # Parameteridentifikation mit MATLAB, Python und Fortran 90/95
 
+[![Tests](https://github.com/Liebau/parameteridentifikation-matlab-python-fortran/actions/workflows/ci.yml/badge.svg)](https://github.com/Liebau/parameteridentifikation-matlab-python-fortran/actions/workflows/ci.yml)
+
 Dieses Repository enthält drei numerisch äquivalente Implementierungen eines
 Modellproblems zur Parameteridentifikation. Es begleitet den GWR-Fachbeitrag
 [Parameteridentifikation](https://gwr-mbh.de/parameteridentifikation/).
